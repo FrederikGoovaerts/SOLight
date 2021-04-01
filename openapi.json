@@ -1,0 +1,360 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Stackoverflow Light",
+        "description": "This is the backend component of the Stackoverflow Light application. It allows question sharing and answering by users, as well as rating questions.",
+        "version": "0.1.0"
+    },
+    "externalDocs": {
+        "description": "Check out the code on Github",
+        "url": "https://github.com/FrederikGoovaerts/SOLight"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080"
+        }
+    ],
+    "tags": [
+        {
+            "name": "questions",
+            "description": "Everything related to questions and answers"
+        },
+        {
+            "name": "metrics",
+            "description": "Metrics about user behaviour"
+        }
+    ],
+    "paths": {
+        "/questions": {
+            "get": {
+                "tags": ["questions"],
+                "summary": "Get the list of questions in order of popularity",
+                "operationId": "getQuestions",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ListQuestion"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["questions"],
+                "summary": "Post a new question",
+                "requestBody": {
+                    "description": "Question that should be added",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Content"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "403": {
+                        "description": "Not authenticated",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/questions/{questionId}": {
+            "get": {
+                "tags": ["questions"],
+                "summary": "Get question details by ID",
+                "parameters": [
+                    {
+                        "name": "questionId",
+                        "in": "path",
+                        "description": "ID of question to return",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuestionDetails"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/questions/{questionId}/answers": {
+            "post": {
+                "tags": ["questions"],
+                "summary": "Post a new answer to a question",
+                "parameters": [
+                    {
+                        "name": "questionId",
+                        "in": "path",
+                        "description": "ID of question to answer",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Answer that should be added",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Content"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "403": {
+                        "description": "Not authenticated",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/questions/{questionId}/upvote": {
+            "post": {
+                "tags": ["questions"],
+                "summary": "Upvote a question",
+                "parameters": [
+                    {
+                        "name": "questionId",
+                        "in": "path",
+                        "description": "ID of question to upvote",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/questions/{questionId}/downvote": {
+            "post": {
+                "tags": ["questions"],
+                "summary": "Downvote a question",
+                "parameters": [
+                    {
+                        "name": "questionId",
+                        "in": "path",
+                        "description": "ID of question to downvote",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/metrics/dow": {
+            "get": {
+                "tags": ["metrics"],
+                "summary": "Get the most popular day of the week",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatMetrics"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/metrics/totals": {
+            "get": {
+                "tags": ["metrics"],
+                "summary": "Get the total count of questions, answers and votes",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatMetrics"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/metrics/averages": {
+            "get": {
+                "tags": ["metrics"],
+                "summary": "Get the average count of questions, answers and votes per active user",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatMetrics"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Content": {
+                "required": ["content"],
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "string"
+                    }
+                },
+                "xml": {
+                    "name": "Content"
+                }
+            },
+            "ListQuestion": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "upvotes": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "downvotes": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "answercount": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "xml": {
+                    "name": "QuestionDetails"
+                }
+            },
+            "QuestionDetails": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "upvotes": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "downvotes": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "answers": {
+                        "type": "array",
+                        "xml": {
+                            "name": "answer",
+                            "wrapped": true
+                        },
+                        "items": {
+                            "$ref": "#/components/schemas/Answer"
+                        }
+                    }
+                },
+                "xml": {
+                    "name": "QuestionDetails"
+                }
+            },
+            "Answer": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    }
+                },
+                "xml": {
+                    "name": "Answer"
+                }
+            },
+            "StatMetrics": {
+                "type": "object",
+                "properties": {
+                    "questions": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "answers": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "votes": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "xml": {
+                    "name": "StatMetrics"
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
