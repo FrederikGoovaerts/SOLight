@@ -15,6 +15,16 @@ export interface QuestionDetails {
     answers: { id: string; content: string }[];
 }
 
+const dayMap: Record<string, string> = {
+    "0": "Sunday",
+    "1": "Monday",
+    "2": "Tuesday",
+    "3": "Wednesday",
+    "4": "Thursday",
+    "5": "Friday",
+    "6": "Saturday"
+};
+
 export class DatabaseWrapper {
     private client: Client;
     private connected: boolean;
@@ -29,6 +39,8 @@ export class DatabaseWrapper {
             throw new Error("Not connected to the database!");
         }
     }
+
+    // Question and answer calls
 
     async createQuestion(content: string): Promise<void> {
         this.checkConnected();
@@ -51,7 +63,7 @@ export class DatabaseWrapper {
     async getListQuestions(): Promise<Array<ListQuestion>> {
         this.checkConnected();
         const res = await this.client.query(
-            "SELECT question.*, count(answer) as answercount " +
+            "SELECT question.id, question.content, question.score, count(answer) as answercount " +
                 "FROM question LEFT JOIN answer ON (answer.question_id = question.id) " +
                 "GROUP BY question.id " +
                 "ORDER BY (count(answer) + question.score) DESC"
@@ -93,6 +105,37 @@ export class DatabaseWrapper {
             "UPDATE question SET score = score + $1 WHERE question.id = $2",
             [change, questionId]
         );
+    }
+
+    async addActiveUser(subject: string): Promise<void> {
+        const result = await this.client.query(
+            "SELECT * FROM souser WHERE souser.sub = $1",
+            [subject]
+        );
+        if (result.rowCount > 0) {
+            return;
+        }
+        const id = uuidv4();
+        await this.client.query("INSERT INTO souser(id, sub) VALUES($1, $2)", [
+            id,
+            subject
+        ]);
+    }
+
+    // Metrics calls
+
+    async getPopularDay(): Promise<string> {
+        const result = await this.client.query(
+            "SELECT dow, COUNT(dow) FROM ( " +
+                "SELECT EXTRACT(DOW FROM question.ts) AS dow FROM question " +
+                "UNION ALL " +
+                "SELECT EXTRACT(DOW FROM answer.ts) AS dow FROM answer " +
+                ") AS dow GROUP BY dow;"
+        );
+        if (result.rowCount === 0) {
+            ("None");
+        }
+        return dayMap[result.rows[0].dow];
     }
 
     async connect(): Promise<void> {
