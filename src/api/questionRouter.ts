@@ -15,8 +15,12 @@ router.get("/questions", async (req, res) => {
 
 router.get("/questions/:id", async (req, res) => {
     const id = req.params.id;
-    const question = await db.getQuestionDetails(id);
-    res.send(question);
+    try {
+        const question = await db.getQuestionDetails(id);
+        res.send(question);
+    } catch (e) {
+        res.sendStatus(404);
+    }
 });
 
 router.post("/questions", jwtMiddleware, async (req, res) => {

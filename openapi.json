@@ -98,6 +98,10 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "The provided ID matched no questions",
+                        "content": {}
                     }
                 }
             }
