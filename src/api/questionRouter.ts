@@ -1,5 +1,5 @@
 import express from "express";
-import { requiresAuth } from "express-openid-connect";
+import { OpenidRequest, requiresAuth } from "express-openid-connect";
 import { db } from "../db/DatabaseWrapper";
 
 const router = express.Router();
@@ -22,6 +22,11 @@ router.post("/questions", requiresAuth(), async (req, res) => {
     }
     await db.createQuestion(req.body.content);
     res.sendStatus(200);
+
+    const { oidc } = req as OpenidRequest;
+    if (oidc.user && (oidc.user as Record<string, string>).sub) {
+        void db.addActiveUser((oidc.user as Record<string, string>).sub);
+    }
 });
 
 router.post("/questions/:id/answers", requiresAuth(), async (req, res) => {
@@ -32,15 +37,20 @@ router.post("/questions/:id/answers", requiresAuth(), async (req, res) => {
     }
     await db.createAnswer(questionId, req.body.content);
     res.sendStatus(200);
+
+    const { oidc } = req as OpenidRequest;
+    if (oidc.user && (oidc.user as Record<string, string>).sub) {
+        void db.addActiveUser((oidc.user as Record<string, string>).sub);
+    }
 });
 
-router.post("/questions/:id/upvote", requiresAuth(), async (req, res) => {
+router.post("/questions/:id/upvote", async (req, res) => {
     const id = req.params.id;
     await db.changeScore(id, 1);
     res.sendStatus(200);
 });
 
-router.post("/questions/:id/downvote", requiresAuth(), async (req, res) => {
+router.post("/questions/:id/downvote", async (req, res) => {
     const id = req.params.id;
     await db.changeScore(id, -1);
     res.sendStatus(200);
