@@ -3,17 +3,17 @@ import { db } from "../db/DatabaseWrapper";
 
 const router = express.Router();
 
-router.get("/metadata/dow", async (req, res) => {
+router.get("/metrics/dow", async (req, res) => {
     const dow = await db.getPopularDay();
     res.send(dow);
 });
 
-router.get("/metadata/totals", async (req, res) => {
+router.get("/metrics/totals", async (req, res) => {
     const dow = await db.getTotals();
     res.send(dow);
 });
 
-router.get("/metadata/averages", async (req, res) => {
+router.get("/metrics/averages", async (req, res) => {
     const dow = await db.getAverages();
     res.send(dow);
 });
