@@ -8,4 +8,9 @@ router.get("/metadata/dow", async (req, res) => {
     res.send(dow);
 });
 
+router.get("/metadata/totals", async (req, res) => {
+    const dow = await db.getTotals();
+    res.send(dow);
+});
+
 export default router;

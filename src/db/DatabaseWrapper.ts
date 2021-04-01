@@ -152,6 +152,31 @@ export class DatabaseWrapper {
         return dayMap[result.rows[0].dow];
     }
 
+    async getTotals(): Promise<TotalMetrics> {
+        const voteCount = Number(
+            (
+                await this.client.query(
+                    "SELECT (upvotecount + downvotecount) as result " +
+                        "FROM (SELECT SUM(question.upvotes) as upvotecount FROM question) as up, " +
+                        "(SELECT SUM(question.downvotes) as downvotecount FROM question) as down;"
+                )
+            ).rows[0].result
+        );
+        const questionCount = Number(
+            (await this.client.query("SELECT COUNT(*) FROM question;")).rows[0]
+                .count
+        );
+        const answerCount = Number(
+            (await this.client.query("SELECT COUNT(*) FROM answer;")).rows[0]
+                .count
+        );
+        return {
+            votes: voteCount,
+            answers: answerCount,
+            questions: questionCount
+        };
+    }
+
     async connect(): Promise<void> {
         await this.client.connect();
         this.connected = true;
