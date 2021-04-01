@@ -12,7 +12,8 @@ export interface ListQuestion {
 export interface QuestionDetails {
     id: string;
     content: string;
-    score: number;
+    upvotes: number;
+    downvotes: number;
     answers: { id: string; content: string }[];
 }
 
@@ -88,7 +89,8 @@ export class DatabaseWrapper {
         return {
             id: question.id,
             content: question.content,
-            score: question.score,
+            upvotes: question.upvotes,
+            downvotes: question.downvotes,
             answers: answers.map((answer: { id: string; content: string }) => ({
                 id: answer.id,
                 content: answer.content
