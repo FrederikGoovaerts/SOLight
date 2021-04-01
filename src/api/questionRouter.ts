@@ -46,13 +46,13 @@ router.post("/questions/:id/answers", requiresAuth(), async (req, res) => {
 
 router.post("/questions/:id/upvote", async (req, res) => {
     const id = req.params.id;
-    await db.changeScore(id, 1);
+    await db.upvote(id);
     res.sendStatus(200);
 });
 
 router.post("/questions/:id/downvote", async (req, res) => {
     const id = req.params.id;
-    await db.changeScore(id, -1);
+    await db.downvote(id);
     res.sendStatus(200);
 });
 

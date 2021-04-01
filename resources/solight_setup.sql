@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS question (
   id UUID NOT NULL,
   content TEXT NOT NULL,
-  score INT NOT NULL,
+  upvotes INT DEFAULT 0,
+  downvotes INT DEFAULT 0,
   ts TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY (id)
 );

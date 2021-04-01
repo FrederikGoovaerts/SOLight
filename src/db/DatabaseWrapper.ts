@@ -4,7 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 export interface ListQuestion {
     id: string;
     content: string;
-    score: number;
+    upvotes: number;
+    downvotes: number;
     answercount: number;
 }
 
@@ -13,6 +14,12 @@ export interface QuestionDetails {
     content: string;
     score: number;
     answers: { id: string; content: string }[];
+}
+
+export interface TotalMetrics {
+    questions: number;
+    answers: number;
+    votes: number;
 }
 
 const dayMap: Record<string, string> = {
@@ -46,7 +53,7 @@ export class DatabaseWrapper {
         this.checkConnected();
         const id = uuidv4();
         await this.client.query(
-            "INSERT INTO question(id, content, score) VALUES($1, $2, 0)",
+            "INSERT INTO question(id, content) VALUES($1, $2)",
             [id, content]
         );
     }
@@ -63,10 +70,10 @@ export class DatabaseWrapper {
     async getListQuestions(): Promise<Array<ListQuestion>> {
         this.checkConnected();
         const res = await this.client.query(
-            "SELECT question.id, question.content, question.score, count(answer) as answercount " +
+            "SELECT question.id, question.content, question.upvotes, question.downvotes, count(answer) as answercount " +
                 "FROM question LEFT JOIN answer ON (answer.question_id = question.id) " +
                 "GROUP BY question.id " +
-                "ORDER BY (count(answer) + question.score) DESC"
+                "ORDER BY (count(answer) + question.upvotes - question.downvotes) DESC"
         );
         return res.rows.map(
             (entry: ListQuestion & { answerCount: string }) => ({
@@ -100,10 +107,17 @@ export class DatabaseWrapper {
         };
     }
 
-    async changeScore(questionId: string, change: number): Promise<void> {
+    async upvote(questionId: string): Promise<void> {
         await this.client.query(
-            "UPDATE question SET score = score + $1 WHERE question.id = $2",
-            [change, questionId]
+            "UPDATE question SET upvotes = upvotes + 1 WHERE question.id = $1",
+            [questionId]
+        );
+    }
+
+    async downvote(questionId: string): Promise<void> {
+        await this.client.query(
+            "UPDATE question SET downvotes = downvotes + 1 WHERE question.id = $1",
+            [questionId]
         );
     }
 
@@ -133,7 +147,7 @@ export class DatabaseWrapper {
                 ") AS dow GROUP BY dow;"
         );
         if (result.rowCount === 0) {
-            ("None");
+            return "None";
         }
         return dayMap[result.rows[0].dow];
     }
