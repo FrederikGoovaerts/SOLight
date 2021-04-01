@@ -11,5 +11,6 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --only=production
 COPY --from=builder /usr/src/app/dist ./dist
+COPY openapi.json ./
 EXPOSE 8080
 CMD ["node","dist/main.js"]

@@ -24,6 +24,7 @@
     "@types/express-jwt": "^6.0.1",
     "@types/node": "^14.14.37",
     "@types/pg": "^7.14.11",
+    "@types/swagger-ui-express": "^4.1.2",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
@@ -39,6 +40,7 @@
     "express-jwt": "^6.0.0",
     "express-openid-connect": "^2.3.0",
     "pg": "^8.5.1",
+    "swagger-ui-express": "^4.1.6",
     "uuid": "^8.3.2"
   }
 }
