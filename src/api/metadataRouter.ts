@@ -13,4 +13,9 @@ router.get("/metadata/totals", async (req, res) => {
     res.send(dow);
 });
 
+router.get("/metadata/averages", async (req, res) => {
+    const dow = await db.getAverages();
+    res.send(dow);
+});
+
 export default router;

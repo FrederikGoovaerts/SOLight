@@ -16,7 +16,7 @@ export interface QuestionDetails {
     answers: { id: string; content: string }[];
 }
 
-export interface TotalMetrics {
+export interface StatMetrics {
     questions: number;
     answers: number;
     votes: number;
@@ -152,7 +152,7 @@ export class DatabaseWrapper {
         return dayMap[result.rows[0].dow];
     }
 
-    async getTotals(): Promise<TotalMetrics> {
+    async getTotals(): Promise<StatMetrics> {
         const voteCount = Number(
             (
                 await this.client.query(
@@ -174,6 +174,19 @@ export class DatabaseWrapper {
             votes: voteCount,
             answers: answerCount,
             questions: questionCount
+        };
+    }
+
+    async getAverages(): Promise<StatMetrics> {
+        const userCount = Number(
+            (await this.client.query("SELECT COUNT(*) FROM souser;")).rows[0]
+                .count
+        );
+        const totals = await this.getTotals();
+        return {
+            votes: totals.votes / userCount,
+            answers: totals.answers / userCount,
+            questions: totals.questions / userCount
         };
     }
 
