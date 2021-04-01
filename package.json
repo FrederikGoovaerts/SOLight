@@ -6,6 +6,8 @@
   "private": "true",
   "scripts": {
     "start": "ts-node src/main.ts",
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist",
     "test": "npm run typecheck && npm run lint && npm run prettier",
     "typecheck": "tsc --noEmit",
     "prettier": "prettier --check .",
@@ -28,6 +30,7 @@
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
