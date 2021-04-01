@@ -1,5 +1,11 @@
 version: "3"
 services:
+    solight:
+        build: .
+        env_file:
+            - .env
+        ports:
+            - "8080:8080"
     database:
         image: "postgres"
         environment:
