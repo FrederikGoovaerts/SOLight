@@ -50,13 +50,13 @@ router.post("/questions/:id/answers", jwtMiddleware, async (req, res) => {
 
 router.post("/questions/:id/upvote", async (req, res) => {
     const id = req.params.id;
-    await db.upvote(id);
+    await db.upvoteQuestion(id);
     res.sendStatus(200);
 });
 
 router.post("/questions/:id/downvote", async (req, res) => {
     const id = req.params.id;
-    await db.downvote(id);
+    await db.downvoteQuestion(id);
     res.sendStatus(200);
 });
 

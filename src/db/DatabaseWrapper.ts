@@ -14,7 +14,12 @@ export interface QuestionDetails {
     content: string;
     upvotes: number;
     downvotes: number;
-    answers: { id: string; content: string }[];
+    answers: {
+        id: string;
+        content: string;
+        upvotes: number;
+        downvotes: number;
+    }[];
 }
 
 export interface StatMetrics {
@@ -91,21 +96,30 @@ export class DatabaseWrapper {
             content: question.content,
             upvotes: question.upvotes,
             downvotes: question.downvotes,
-            answers: answers.map((answer: { id: string; content: string }) => ({
-                id: answer.id,
-                content: answer.content
-            }))
+            answers: answers.map(
+                (answer: {
+                    id: string;
+                    content: string;
+                    upvotes: number;
+                    downvotes: number;
+                }) => ({
+                    id: answer.id,
+                    content: answer.content,
+                    upvotes: answer.upvotes,
+                    downvotes: answer.downvotes
+                })
+            )
         };
     }
 
-    async upvote(questionId: string): Promise<void> {
+    async upvoteQuestion(questionId: string): Promise<void> {
         await this.pool.query(
             "UPDATE question SET upvotes = upvotes + 1 WHERE question.id = $1",
             [questionId]
         );
     }
 
-    async downvote(questionId: string): Promise<void> {
+    async downvoteQuestion(questionId: string): Promise<void> {
         await this.pool.query(
             "UPDATE question SET downvotes = downvotes + 1 WHERE question.id = $1",
             [questionId]

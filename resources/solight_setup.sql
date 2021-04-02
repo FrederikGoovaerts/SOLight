@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS answer (
   id UUID NOT NULL,
   question_id UUID NOT NULL,
   content TEXT NOT NULL,
+  upvotes INT DEFAULT 0,
+  downvotes INT DEFAULT 0,
   ts TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY (id),
   CONSTRAINT fk_question
