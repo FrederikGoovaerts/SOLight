@@ -126,6 +126,20 @@ export class DatabaseWrapper {
         );
     }
 
+    async upvoteAnswer(answerId: string): Promise<void> {
+        await this.pool.query(
+            "UPDATE answer SET upvotes = upvotes + 1 WHERE answer.id = $1",
+            [answerId]
+        );
+    }
+
+    async downvoteAnswer(answerId: string): Promise<void> {
+        await this.pool.query(
+            "UPDATE answer SET downvotes = downvotes + 1 WHERE answer.id = $1",
+            [answerId]
+        );
+    }
+
     async addActiveUser(subject: string): Promise<void> {
         const result = await this.pool.query(
             "SELECT * FROM souser WHERE souser.sub = $1",

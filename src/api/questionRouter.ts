@@ -60,4 +60,16 @@ router.post("/questions/:id/downvote", async (req, res) => {
     res.sendStatus(200);
 });
 
+router.post("/answers/:id/upvote", async (req, res) => {
+    const id = req.params.id;
+    await db.upvoteAnswer(id);
+    res.sendStatus(200);
+});
+
+router.post("/answers/:id/downvote", async (req, res) => {
+    const id = req.params.id;
+    await db.downvoteAnswer(id);
+    res.sendStatus(200);
+});
+
 export default router;
