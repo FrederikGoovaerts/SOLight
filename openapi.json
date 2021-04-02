@@ -191,6 +191,52 @@
                 }
             }
         },
+        "/answers/{answerId}/upvote": {
+            "post": {
+                "tags": ["questions"],
+                "summary": "Upvote an answer",
+                "parameters": [
+                    {
+                        "name": "answerId",
+                        "in": "path",
+                        "description": "ID of answer to upvote",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/answers/{answerId}/downvote": {
+            "post": {
+                "tags": ["questions"],
+                "summary": "Downvote an answer",
+                "parameters": [
+                    {
+                        "name": "answerId",
+                        "in": "path",
+                        "description": "ID of answer to downvote",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {}
+                    }
+                }
+            }
+        },
         "/metrics/dow": {
             "get": {
                 "tags": ["metrics"],
@@ -326,6 +372,14 @@
                     },
                     "content": {
                         "type": "string"
+                    },
+                    "upvotes": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "downvotes": {
+                        "type": "integer",
+                        "format": "int64"
                     }
                 },
                 "xml": {
