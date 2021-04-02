@@ -67,10 +67,5 @@ An AWS example: Set up an RDS instance compatible with PostgreSQL, deploy the pr
 -   Using an OpenID Connect provider turned out to be more confusing than expected and I lost some time on trying that out. I opted to replace it with Bearer token logic and verification on the necessary routes.
 -   Currently, user registration and question attribution is not implemented. It seemed not strictly necessary for the assignment so I made only the necessary effort for the metrics logic.
 -   Adding an extra API identifier to stored objects. Currently, the database primary key of objects is exposed to the public, which is not necessarily very clean.
-
-## TO-DO
-
-These are some tasks I should still do before the project is "complete":
-
--   Add unit testing and/or end-to-end testing
--   Add the missing up/downvote logic for answers
+-   Adding unit tests for all logic. I added some as an example of my testing and mocking strategies, which should cover enough versatile scenarios.
+-   Documenting the code itself. The code is small and simple enough to understand at a glance, but in a real-world situation I would add some JSDoc style comments where necessary/applicable.
