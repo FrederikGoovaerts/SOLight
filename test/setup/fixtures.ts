@@ -1,0 +1,4 @@
+export const validJwt =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJEdW1teSIsImlhdCI6MTYxNzM1NzQ2MSwiZXhwIjoxOTAxMzU0MjYxLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJkdW1teUBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6Ik1teSIsIlN1cm5hbWUiOiJEdSIsIkVtYWlsIjoiZHVtbXlAZXhhbXBsZS5jb20ifQ.9dyEuOZGz62gsUcLEdzP-SRVxd_g25Z8iengo8bj6Do";
+
+export const invalidJwt = "dummy";
