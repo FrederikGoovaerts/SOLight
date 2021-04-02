@@ -10,6 +10,10 @@ app.use(questionRouter);
 app.use(metricsRouter);
 app.use(apiDocsRouter);
 
+app.get("/health", (req, res) => {
+    res.sendStatus(200);
+});
+
 export function startApi(): void {
     app.listen(port, () => {
         console.log(
