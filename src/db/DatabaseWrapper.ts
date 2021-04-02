@@ -182,4 +182,5 @@ export class DatabaseWrapper {
     }
 }
 
-export const db = new DatabaseWrapper();
+const db = new DatabaseWrapper();
+export default db;

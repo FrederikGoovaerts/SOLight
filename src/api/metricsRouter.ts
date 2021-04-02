@@ -1,5 +1,5 @@
 import express from "express";
-import { db } from "../db/DatabaseWrapper";
+import db from "../db/DatabaseWrapper";
 
 const router = express.Router();
 

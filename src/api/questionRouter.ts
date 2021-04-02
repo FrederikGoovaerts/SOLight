@@ -1,6 +1,6 @@
 import express from "express";
 import jwt from "express-jwt";
-import { db } from "../db/DatabaseWrapper";
+import db from "../db/DatabaseWrapper";
 
 const jwtMiddleware = jwt({
     secret: process.env.JWT_SECRET ?? "",
