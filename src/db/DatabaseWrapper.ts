@@ -208,6 +208,10 @@ export class DatabaseWrapper {
             questions: totals.questions / userCount
         };
     }
+
+    async close(): Promise<void> {
+        await this.pool.end();
+    }
 }
 
 const db = new DatabaseWrapper();
