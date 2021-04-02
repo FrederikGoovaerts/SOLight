@@ -1,3 +1,9 @@
-import { startApi } from "./api/api";
+import app from "./api/api";
 
-startApi();
+const port = 8080;
+
+app.listen(port, () => {
+    console.log(
+        `Stackoverflow Light backend started at http://localhost:${port}`
+    );
+});
