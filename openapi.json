@@ -61,8 +61,8 @@
                     "required": true
                 },
                 "responses": {
-                    "403": {
-                        "description": "Not authenticated",
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {}
                     }
                 },
@@ -133,8 +133,8 @@
                     "required": true
                 },
                 "responses": {
-                    "403": {
-                        "description": "Not authenticated",
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {}
                     }
                 },
