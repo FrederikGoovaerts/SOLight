@@ -56,9 +56,9 @@ The backend is provided as a buildable docker container. This makes it easy to r
 
 The backend is stateless, so trouble with scaling and data inconsitencies are reduced to a minimum.
 
-An AWS example: Set up an RDS instance compatible with PostgreSQL, deploy the project on Fargate, and with minimal extra configuration.
+An AWS example: Set up an RDS instance compatible with PostgreSQL, deploy the project on Fargate. Setting this up correctly in a VPC with a public subnet to balance the traffic allows protection of the application from the outside and improves scalability and transparency of rolling upgrades. Design based on [AWS blog post](https://aws.amazon.com/blogs/compute/task-networking-in-aws-fargate/).
 
-![Image of Yaktocat](./resources/SOLight-architecture.png)
+![Deployment diagram](./resources/SOLight-deployment.png)
 
 ## Omitted work
 
